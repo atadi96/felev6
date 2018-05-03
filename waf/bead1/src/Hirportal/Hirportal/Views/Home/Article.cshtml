@@ -1,0 +1,22 @@
+﻿@using Hirportal.Models
+
+@model Article
+
+@{ 
+    ViewData["Title"] = Model.Title;
+}
+
+<article id="main-article">
+    @if (Model.Images.Any())
+    {
+        <img src="@System.IO.Path.Combine(ViewBag.ImagePath, Model.Images.First().MediumPath)" alt="@Model.Title"/>
+    }
+    <h1>@Model.Title</h1>
+    <div id="article-meta">
+        <span id="article-date">@Model.Modified.ToString("yyyy.MM.dd HH:mm")</span>
+        <span id="article-author">@Model.Author.Name</span>
+    </div>
+    <div id="article-content">
+        @Model.Content
+    </div>
+</article>
