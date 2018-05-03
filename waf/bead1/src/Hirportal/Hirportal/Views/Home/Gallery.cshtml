@@ -1,0 +1,34 @@
+﻿@using Hirportal.Models
+
+@model Article
+
+@{
+    ViewData["Title"] = Model == null ? "Not Found!" : "Gallery  - " + Model.Title;
+}
+
+<div id="gallery">
+    @if (Model == null)
+    {
+        <p>Oops! This article does not exist!</p>
+    }
+    else
+    {
+        <h1>@Model.Title - Gallery</h1>
+        <a href="@Url.Action("Article", "Home", new { id = ViewBag.ArticleID })">Back to the article</a>
+        <div id="images">
+            @if (Model.Images.Any())
+            {
+                @foreach (ArticleImage image in Model.Images)
+                {
+                    <div class="gallery-image-container">
+                        <img class="gallery-image" src="@System.IO.Path.Combine(ViewBag.ImagePath, image.FilePath)" alt="@Model.Title" />
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No images for this article</p>
+            }
+        </div>
+    }
+</div>

@@ -1,0 +1,59 @@
+﻿@using Hirportal.Models
+
+@model ArchiveViewModel
+
+<div id="archive-content">
+    @foreach(Article article in Model.Articles)
+    {
+        <article class="archive-article">
+            <span class="archive-article-title">
+                <a href="@Url.Action("Article", "Home", new { id = article.Id })">
+                    @article.Title
+                </a>
+            </span>
+            <span class="archive-article-description">
+                @article.Description
+            </span>
+        </article>
+    }
+</div>
+<div id="archive-paging">
+    <form asp-controller="Home" asp-action="Archive" method="get">
+        <label for="text-search">Title or content:</label>
+        <input type="text" id="text-search" asp-for="Search"/>
+        <label for="date-search">Date:</label>
+        <input type="date" id="date-search" asp-for="DateTime"/>
+        <input type="submit" value="Search"/>
+    </form>
+    <div id="paging-prev">
+        @if(Model.FirstPage)
+        {
+            <span>Previous</span>
+        }
+        else
+        {
+            <form asp-controller="Home" asp-action="Archive" method="get">
+                <input type="hidden" asp-for="Page" value="@(Model.Page - 1)" />
+                <input type="hidden" asp-for="DateTime" value="@Model.DateTime" />
+                <input type="hidden" asp-for="Search" value="@Model.Search" />
+                <input type="submit" value="Previous" />
+            </form>
+        }
+    </div>
+    <div id="paging-current">@Model.Page</div>
+    <div id="paging-next">
+        @if(Model.LastPage)
+        {
+            <span>Next</span>
+        }
+        else
+        {
+            <form asp-controller="Home" asp-action="Archive" method="get">
+                <input type="hidden" asp-for="Page" value="@(Model.Page + 1)" />
+                <input type="hidden" asp-for="DateTime" value="@Model.DateTime" />
+                <input type="hidden" asp-for="Search" value="@Model.Search" />
+                <input type="submit" value="Next" />
+            </form>
+        }
+    </div>
+</div>

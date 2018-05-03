@@ -78,7 +78,7 @@ namespace Hirportal.Models
 
         private static void CatNews(Author cat)
         {
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 45; i++)
             {
                 Article article = new Article()
                 {
@@ -99,8 +99,8 @@ namespace Hirportal.Models
                               "couch to claw at the fabric before taking a catnap or shake treat bag."
                 };
                 _context.Articles.Add(article);
+                _context.SaveChanges();
             }
-            _context.SaveChanges();
         }
     }
 

@@ -15,6 +15,8 @@ namespace Hirportal.Controllers
         NewsContext _context;
         IOptions<ImagePathConfig> _imagePath;
 
+        private string ImagePath => "/" + _imagePath.Value.ImagePath;
+
         public HomeController(NewsContext context, IOptions<ImagePathConfig> pathConfig)
         {
             _context = context;
@@ -33,7 +35,7 @@ namespace Hirportal.Controllers
                             .OrderByDescending(art => art.Modified)
                             .Where(art => art.Leading)
                             .FirstOrDefault(_ => true);
-            return View("Index", new HomeViewModel(_imagePath.Value.ImagePath, articles,leading));
+            return View("Index", new HomeViewModel(ImagePath, articles,leading));
         }
 
         public IActionResult Article(int id)
@@ -43,8 +45,49 @@ namespace Hirportal.Controllers
                             .Include(a => a.Author)
                             .Where(a => a.Id == id)
                             .SingleOrDefault();
-            ViewBag.ImagePath = _imagePath.Value.ImagePath;
+            ViewBag.ImagePath = ImagePath;
             return View("Article", article);
+        }
+
+        public IActionResult Gallery(int id)
+        {
+            var article = _context.Articles
+                            .Include(a => a.Images)
+                            .Where(a => a.Id == id)
+                            .SingleOrDefault();
+            ViewBag.ImagePath = ImagePath;
+            ViewBag.ArticleId = id;
+            return View("Gallery", article);
+        }
+
+        public IActionResult Archive(ArchiveViewModel archive)
+        {
+            int articlesPerPage = 20;
+            DateTime? dateTime = archive.DateTime;
+            string search = archive.Search;
+            int page = archive.Page;
+            IQueryable<Article> articles =
+                _context.Articles
+                        .OrderByDescending(art => art.Modified)
+                        .Where(art =>
+                            String.IsNullOrWhiteSpace(search) ||
+                            art.Title.Contains(search) ||
+                            art.Content.Contains(search)
+                        ).Where(art =>
+                            dateTime == null || art.Modified.Date == dateTime.Value.Date
+                        );
+            long articleNum = articles.LongCount();
+            int maxPage = (int)((articleNum - 1) / 20) + 1;
+            int actualPage = Math.Min(maxPage, Math.Max(1, page));
+
+            var displayArticles = articles
+                                    .Skip((actualPage - 1) * articlesPerPage)
+                                    .Take(articlesPerPage)
+                                    .ToArray();
+            archive.Articles = displayArticles;
+            archive.Page = actualPage;
+            archive.LastPage = actualPage == maxPage;
+            return View("Archive", archive);
         }
 
         public IActionResult Error()
