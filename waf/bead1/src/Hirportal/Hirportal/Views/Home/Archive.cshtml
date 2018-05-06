@@ -2,7 +2,20 @@
 
 @model ArchiveViewModel
 
+<div id="archive-search">
+    <h3>Search</h3>
+    <form asp-controller="Home" asp-action="Archive" method="get">
+        <label for="text-search">Title:</label>
+        <input type="text" id="text-search" asp-for="TitleSearch" />
+        <label for="text-search">Content:</label>
+        <input type="text" id="text-search" asp-for="ContentSearch" />
+        <label for="date-search">Date:</label>
+        <input type="date" id="date-search" asp-for="DateTime" value="@Model.DateTime?.Date" />
+        <input type="submit" value="Search" />
+    </form>
+</div>
 <div id="archive-content">
+    <h3>Articles</h3>
     @foreach(Article article in Model.Articles)
     {
         <article class="archive-article">
@@ -18,13 +31,6 @@
     }
 </div>
 <div id="archive-paging">
-    <form asp-controller="Home" asp-action="Archive" method="get">
-        <label for="text-search">Title or content:</label>
-        <input type="text" id="text-search" asp-for="Search"/>
-        <label for="date-search">Date:</label>
-        <input type="date" id="date-search" asp-for="DateTime"/>
-        <input type="submit" value="Search"/>
-    </form>
     <div id="paging-prev">
         @if(Model.FirstPage)
         {
@@ -34,13 +40,14 @@
         {
             <form asp-controller="Home" asp-action="Archive" method="get">
                 <input type="hidden" asp-for="Page" value="@(Model.Page - 1)" />
-                <input type="hidden" asp-for="DateTime" value="@Model.DateTime" />
-                <input type="hidden" asp-for="Search" value="@Model.Search" />
+                <input type="hidden" asp-for="DateTime" value="@Model.DateTime?.Date" />
+                <input type="hidden" asp-for="TitleSearch" value="@Model.TitleSearch" />
+                <input type="hidden" asp-for="ContentSearch" value="@Model.ContentSearch" />
                 <input type="submit" value="Previous" />
             </form>
         }
     </div>
-    <div id="paging-current">@Model.Page</div>
+    <div id="paging-current">@Model.Page / @Model.MaxPage</div>
     <div id="paging-next">
         @if(Model.LastPage)
         {
@@ -50,8 +57,9 @@
         {
             <form asp-controller="Home" asp-action="Archive" method="get">
                 <input type="hidden" asp-for="Page" value="@(Model.Page + 1)" />
-                <input type="hidden" asp-for="DateTime" value="@Model.DateTime" />
-                <input type="hidden" asp-for="Search" value="@Model.Search" />
+                <input type="hidden" asp-for="DateTime" value="@Model.DateTime?.Date" />
+                <input type="hidden" asp-for="TitleSearch" value="@Model.TitleSearch" />
+                <input type="hidden" asp-for="ContentSearch" value="@Model.ContentSearch" />
                 <input type="submit" value="Next" />
             </form>
         }

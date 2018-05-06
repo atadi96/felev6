@@ -49,44 +49,42 @@ namespace Hirportal.Controllers
             return View("Article", article);
         }
 
-        public IActionResult Gallery(int id)
+        public IActionResult Gallery(int id, PagingViewModel<ArticleImage> paging)
         {
             var article = _context.Articles
-                            .Include(a => a.Images)
                             .Where(a => a.Id == id)
                             .SingleOrDefault();
+            if (article == null)
+            {
+                paging = null;
+            }
+            else
+            {
+                var images = _context.Images
+                                .Where(img => img.Article == article);
+                paging.UpdatePageContents(1, images);
+                ViewBag.ArticleTitle = article.Title;
+            }
             ViewBag.ImagePath = ImagePath;
             ViewBag.ArticleId = id;
-            return View("Gallery", article);
+            return View("Gallery", paging);
         }
 
         public IActionResult Archive(ArchiveViewModel archive)
         {
             int articlesPerPage = 20;
             DateTime? dateTime = archive.DateTime;
-            string search = archive.Search;
-            int page = archive.Page;
             IQueryable<Article> articles =
                 _context.Articles
                         .OrderByDescending(art => art.Modified)
-                        .Where(art =>
-                            String.IsNullOrWhiteSpace(search) ||
-                            art.Title.Contains(search) ||
-                            art.Content.Contains(search)
+                        .Where(art => ( String.IsNullOrWhiteSpace(archive.TitleSearch) ||
+                                        art.Title.Contains(archive.TitleSearch) )
+                                   && ( String.IsNullOrWhiteSpace(archive.ContentSearch) ||
+                                        art.Content.Contains(archive.ContentSearch) )
                         ).Where(art =>
                             dateTime == null || art.Modified.Date == dateTime.Value.Date
                         );
-            long articleNum = articles.LongCount();
-            int maxPage = (int)((articleNum - 1) / 20) + 1;
-            int actualPage = Math.Min(maxPage, Math.Max(1, page));
-
-            var displayArticles = articles
-                                    .Skip((actualPage - 1) * articlesPerPage)
-                                    .Take(articlesPerPage)
-                                    .ToArray();
-            archive.Articles = displayArticles;
-            archive.Page = actualPage;
-            archive.LastPage = actualPage == maxPage;
+            archive.UpdatePageContents(articlesPerPage, articles);
             return View("Archive", archive);
         }
 

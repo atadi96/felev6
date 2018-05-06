@@ -23,11 +23,11 @@
     @foreach(HomeViewModel.ArticleViewModel article in Model.Articles)
     {
         <article>
-            <h2 class="article-title">
+            <h3 class="article-title">
                 <a href="@Url.Action("Article", "Home", new { id = article.Id})">
                     @article.Title
                 </a>
-            </h2>
+            </h3>
             <p class="article-description">@article.Description</p>
         </article>
     }
