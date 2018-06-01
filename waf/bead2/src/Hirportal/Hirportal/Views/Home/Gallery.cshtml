@@ -1,0 +1,65 @@
+﻿@using Hirportal.Models
+
+@model PagingViewModel<ArticleImage>
+
+@{
+    ViewData["Title"] = Model == null ? "Not Found!" : "Gallery  - " + ViewBag.ArticleTitle;
+}
+
+<div id="gallery">
+    @if (Model == null)
+    {
+        <p>Oops! This article does not exist!</p>
+    }
+    else
+    {
+        <h1>@ViewBag.ArticleTitle - Gallery</h1>
+        <a href="@Url.Action("Article", "Home", new { id = ViewBag.ArticleId })">Back to the article</a>
+        <div id="images">
+            @if (Model.Items.Length != 0)
+            {
+                @foreach (ArticleImage image in Model.Items)
+                {
+                    <div class="gallery-image-container">
+                        <img class="gallery-image" src="@System.IO.Path.Combine(ViewBag.ImagePath, image.FilePath)" alt="@ViewBag.ArticleTitle" />
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No images for this article</p>
+            }
+        </div>
+        <div id="gallery-paging">
+            <div id="paging-prev">
+                @if (Model.FirstPage)
+                {
+                    <span>Previous</span>
+                }
+                else
+                {
+                    <form asp-controller="Home" asp-action="Gallery" method="get">
+                        <!--<input type="hidden" name="id" value="@ViewBag.ArticleId" />-->
+                        <input type="hidden" asp-for="Page" value="@(Model.Page - 1)" />
+                        <input type="submit" value="Previous" />
+                    </form>
+                }
+            </div>
+            <div id="paging-current">@Model.Page / @Model.MaxPage</div>
+            <div id="paging-next">
+                @if (Model.LastPage)
+                {
+                    <span>Next</span>
+                }
+                else
+                {
+                    <form asp-controller="Home" asp-action="Gallery" method="get">
+                        <!--<input type="hidden" name="id" value="@ViewBag.ArticleId" />-->
+                        <input type="hidden" asp-for="Page" value="@(Model.Page + 1)" />
+                        <input type="submit" value="Next" />
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>
