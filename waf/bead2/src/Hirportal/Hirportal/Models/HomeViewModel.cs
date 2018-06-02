@@ -24,20 +24,21 @@ namespace Hirportal.Models
 
         public class LeadingArticleViewModel
         {
-            public LeadingArticleViewModel(string imgPath, Article article)
+            public LeadingArticleViewModel(Article article)
             {
                 Article = new ArticleViewModel(article);
-                ImagePath = System.IO.Path.Combine(imgPath, article.Images.First().SmallPath);
+                var leadingImage = article.Images.First();
+                Image = new ImageViewModel(leadingImage);
             }
 
-            public string ImagePath { get; private set; }
+            public ImageViewModel Image { get; private set; }
             public ArticleViewModel Article { get; private set; }
         }
 
         public ArticleViewModel[] Articles { get; private set; }
         public LeadingArticleViewModel LeadingArticle { get; private set; }
 
-        public HomeViewModel(string imagePath, Article[] articles, Article leading)
+        public HomeViewModel(Article[] articles, Article leading)
         {
             Articles = articles
                         ?.Select(article => new ArticleViewModel(article))
@@ -45,7 +46,7 @@ namespace Hirportal.Models
                         ?? new ArticleViewModel[0];
             LeadingArticle = leading == null
                                 ? null
-                                : new LeadingArticleViewModel(imagePath, leading);
+                                : new LeadingArticleViewModel(leading);
         }
     }
 }

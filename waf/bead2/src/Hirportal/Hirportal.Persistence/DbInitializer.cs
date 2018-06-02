@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.ApplicationInsights.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,10 +39,7 @@ namespace Hirportal.Persistence
 
         private static ArticleImage CopyPictures(string srcImageDirectory, string targetImageDirectory, string imageName)
         {
-            ArticleImage image = new ArticleImage() { FilePath = imageName };
-            File.Copy(Path.Combine(srcImageDirectory, image.FilePath), Path.Combine(targetImageDirectory, image.FilePath), true);
-            File.Copy(Path.Combine(srcImageDirectory, image.MediumPath), Path.Combine(targetImageDirectory, image.MediumPath), true);
-            File.Copy(Path.Combine(srcImageDirectory, image.SmallPath), Path.Combine(targetImageDirectory, image.SmallPath), true);
+            ArticleImage image = new ArticleImage() { ImageData = new byte[0] };
             return image;
         }
 
@@ -69,8 +67,18 @@ namespace Hirportal.Persistence
                           We'll be reporting as soon as any new details surface!"
             };
 
-            article.Images.Add(CopyPictures(srcImageDirectory, targetImageDirectory, "impact1.png"));
-            article.Images.Add(CopyPictures(srcImageDirectory, targetImageDirectory, "impact2.png"));
+            article.Images.Add(
+                new ArticleImage()
+                {
+                    ImageData = Properties.Resources.impact1,
+                }
+            );
+            article.Images.Add(
+                new ArticleImage()
+                {
+                    ImageData = Properties.Resources.impact2,
+                }
+            );
 
             _context.Articles.Add(article);
             _context.SaveChanges();

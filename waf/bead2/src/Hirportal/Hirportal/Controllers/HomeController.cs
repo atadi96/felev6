@@ -15,14 +15,10 @@ namespace Hirportal.Controllers
     public class HomeController : Controller
     {
         NewsContext _context;
-        IOptions<ImagePathConfig> _imagePath;
 
-        private string ImagePath => "/" + _imagePath.Value.ImagePath;
-
-        public HomeController(NewsContext context, IOptions<ImagePathConfig> pathConfig)
+        public HomeController(NewsContext context)
         {
             _context = context;
-            _imagePath = pathConfig;
         }
 
         public IActionResult Index()
@@ -37,7 +33,7 @@ namespace Hirportal.Controllers
                             .OrderByDescending(art => art.Modified)
                             .Where(art => art.Leading)
                             .FirstOrDefault(_ => true);
-            return View("Index", new HomeViewModel(ImagePath, articles,leading));
+            return View("Index", new HomeViewModel(articles, leading));
         }
 
         public IActionResult Article(int id)
@@ -47,11 +43,10 @@ namespace Hirportal.Controllers
                             .Include(a => a.Author)
                             .Where(a => a.Id == id)
                             .SingleOrDefault();
-            ViewBag.ImagePath = ImagePath;
-            return View("Article", article);
+            return View("Article", article == null ? null : new ArticleViewModel(article));
         }
 
-        public IActionResult Gallery(int id, PagingViewModel<ArticleImage> paging)
+        public IActionResult Gallery(int id, PagingViewModel<ImageViewModel> paging)
         {
             var article = _context.Articles
                             .Where(a => a.Id == id)
@@ -63,11 +58,11 @@ namespace Hirportal.Controllers
             else
             {
                 var images = _context.Images
-                                .Where(img => img.Article == article);
+                                .Where(img => img.Article == article)
+                                .Select(img => new ImageViewModel(img));
                 paging.UpdatePageContents(1, images);
                 ViewBag.ArticleTitle = article.Title;
             }
-            ViewBag.ImagePath = ImagePath;
             ViewBag.ArticleId = id;
             return View("Gallery", paging);
         }

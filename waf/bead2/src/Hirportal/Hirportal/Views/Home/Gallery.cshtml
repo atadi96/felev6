@@ -1,6 +1,6 @@
 ﻿@using Hirportal.Models
 
-@model PagingViewModel<ArticleImage>
+@model PagingViewModel<ImageViewModel>
 
 @{
     ViewData["Title"] = Model == null ? "Not Found!" : "Gallery  - " + ViewBag.ArticleTitle;
@@ -18,10 +18,10 @@
         <div id="images">
             @if (Model.Items.Length != 0)
             {
-                @foreach (ArticleImage image in Model.Items)
+                @foreach (ImageViewModel image in Model.Items)
                 {
                     <div class="gallery-image-container">
-                        <img class="gallery-image" src="@System.IO.Path.Combine(ViewBag.ImagePath, image.FilePath)" alt="@ViewBag.ArticleTitle" />
+                        <img class="gallery-image" src="@Url.Action("Full", "Images", image)" alt="@ViewBag.ArticleTitle" />
                     </div>
                 }
             }
