@@ -29,8 +29,6 @@ namespace Hirportal
                 .AddEntityFrameworkStores<NewsContext>()
                 .AddDefaultTokenProviders();
 
-            services.Configure<ImagePathConfig>(Configuration);//_ => new ImagePathConfig() { ImagePath = Configuration.GetValue<string>("ImagePath") }
-
             services.AddMvc();
         }
 
@@ -63,11 +61,7 @@ namespace Hirportal
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initialize(
-                app,
-                System.IO.Path.Combine(env.ContentRootPath, Configuration.GetValue<string>("DummyImages")),
-                System.IO.Path.Combine(env.WebRootPath, Configuration.GetValue<string>("ImagePath"))
-            );
+            DbInitializer.Initialize(app);
         }
     }
 }

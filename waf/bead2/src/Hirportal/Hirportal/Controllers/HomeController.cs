@@ -43,10 +43,10 @@ namespace Hirportal.Controllers
                             .Include(a => a.Author)
                             .Where(a => a.Id == id)
                             .SingleOrDefault();
-            return View("Article", article == null ? null : new ArticleViewModel(article));
+            return View("Article", article);
         }
 
-        public IActionResult Gallery(int id, PagingViewModel<ImageViewModel> paging)
+        public IActionResult Gallery(int id, PagingViewModel<ArticleImage> paging)
         {
             var article = _context.Articles
                             .Where(a => a.Id == id)
@@ -58,8 +58,7 @@ namespace Hirportal.Controllers
             else
             {
                 var images = _context.Images
-                                .Where(img => img.Article == article)
-                                .Select(img => new ImageViewModel(img));
+                                .Where(img => img.Article == article);
                 paging.UpdatePageContents(1, images);
                 ViewBag.ArticleTitle = article.Title;
             }

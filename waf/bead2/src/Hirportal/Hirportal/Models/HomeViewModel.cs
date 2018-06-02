@@ -27,11 +27,10 @@ namespace Hirportal.Models
             public LeadingArticleViewModel(Article article)
             {
                 Article = new ArticleViewModel(article);
-                var leadingImage = article.Images.First();
-                Image = new ImageViewModel(leadingImage);
+                Image = article.Images.First();
             }
 
-            public ImageViewModel Image { get; private set; }
+            public ArticleImage Image { get; private set; }
             public ArticleViewModel Article { get; private set; }
         }
 

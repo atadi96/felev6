@@ -9,7 +9,7 @@
     @if (Model.LeadingArticle != null)
     {
         <article id="leading-article">
-            <img src="@Url.Action("Small", "Images", Model.LeadingArticle.Image))" alt="@Model.LeadingArticle.Article.Title" />
+            <img src="@Url.Action("Small", "Images", Model.LeadingArticle.Image.LinkData))" alt="@Model.LeadingArticle.Article.Title" />
             <div id="leading-article-text">
                 <h2 class="article-title">
                     <a href="@Url.Action( "Article", "Home",new { id = Model.LeadingArticle.Article.Id})">

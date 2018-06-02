@@ -13,7 +13,7 @@ namespace Hirportal.Persistence
     {
         private static NewsContext _context;
 
-        public static void Initialize(IApplicationBuilder app, string srcImageDirectory, string targetImageDirectory)
+        public static void Initialize(IApplicationBuilder app)
         {
             _context = app.ApplicationServices.GetRequiredService<NewsContext>();
 
@@ -32,18 +32,12 @@ namespace Hirportal.Persistence
                 _context.Authors.Add(nervHQ);
                 _context.Authors.Add(nyan);
                 _context.SaveChanges();
-                EvaNews(nervHQ, srcImageDirectory, targetImageDirectory);
+                EvaNews(nervHQ);
                 CatNews(nyan);
             }
         }
 
-        private static ArticleImage CopyPictures(string srcImageDirectory, string targetImageDirectory, string imageName)
-        {
-            ArticleImage image = new ArticleImage() { ImageData = new byte[0] };
-            return image;
-        }
-
-        private static void EvaNews(Author nerv, string srcImageDirectory, string targetImageDirectory)
+        private static void EvaNews(Author nerv)
         {
             Article article = new Article()
             {
