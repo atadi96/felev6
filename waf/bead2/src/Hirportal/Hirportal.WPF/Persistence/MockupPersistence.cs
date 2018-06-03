@@ -16,7 +16,7 @@ namespace Hirportal.WPF.Persistence
             IsLoggedOn = false;
         }
 
-        public async Task<bool> CreateArticleAsync(ArticleDTO article)
+        public async Task<bool> CreateArticleAsync(ArticleUploadDTO article)
         {
             article.Id = 10;
             return true;
@@ -27,9 +27,16 @@ namespace Hirportal.WPF.Persistence
             return true;
         }
 
-        public Task<ArticleDTO> GetArticleAsync(int articleID)
+        public async Task<ArticleDTO> GetArticleAsync(int articleID)
         {
-            throw new NotImplementedException();
+            return new ArticleDTO()
+            {
+                Content = "This is a sample content",
+                Title = "Sample Title",
+                Description = "Sample text",
+                Id = 5,
+                Images = new ImageDTO[0]
+            };
         }
 
         public async Task<IEnumerable<ArticlePreviewDTO>> GetUserArticlesAsync()
@@ -73,7 +80,7 @@ namespace Hirportal.WPF.Persistence
             return true;
         }
 
-        public async Task<bool> UpdateArticleAsync(ArticleDTO article)
+        public async Task<bool> UpdateArticleAsync(ArticleUploadDTO article)
         {
             return true;
         }

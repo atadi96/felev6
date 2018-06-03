@@ -8,10 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
-using Hirportal.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Hirportal.Persistence;
 
 namespace Hirportal.Service
 {
@@ -56,6 +55,11 @@ namespace Hirportal.Service
 
             app.UseAuthentication();
             app.UseMvc();
+
+            NewsContext news = app.ApplicationServices.GetRequiredService<NewsContext>();
+            UserManager<Author> userManager = app.ApplicationServices.GetRequiredService<UserManager<Author>>();
+
+            DbInitializer.Initialize(news, userManager);
         }
     }
 }

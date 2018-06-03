@@ -82,14 +82,30 @@ namespace Hirportal.WPF
             Shutdown();
         }
 
-        private void MainViewModel_EditArticle(object sender, int e)
+        private void MainViewModel_EditArticle(object sender, int article)
         {
-            throw new NotImplementedException();
+            ArticleEditViewModel vm = new ArticleEditViewModel(persistence, article);
+            ArticleEditWindow editWindow = new ArticleEditWindow();
+            vm.BackEvent += (object s, EventArgs e) =>
+            {
+                editWindow.Close();
+            };
+            vm.MessageApplication += ViewModel_MessageApplication;
+            editWindow.DataContext = vm;
+            editWindow.ShowDialog();
         }
 
         private void MainViewModel_CreateArticle(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            ArticleEditViewModel vm = new ArticleEditViewModel(persistence, null);
+            ArticleEditWindow editWindow = new ArticleEditWindow();
+            vm.BackEvent += (object o, EventArgs ea) =>
+            {
+                editWindow.Close();
+            };
+            vm.MessageApplication += ViewModel_MessageApplication;
+            editWindow.DataContext = vm;
+            editWindow.ShowDialog();
         }
     }
 }

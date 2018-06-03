@@ -35,13 +35,6 @@ namespace Hirportal
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetRequiredService<NewsContext>();
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-            }
-
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -61,7 +54,9 @@ namespace Hirportal
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            DbInitializer.Initialize(app);
+            NewsContext news = app.ApplicationServices.GetRequiredService<NewsContext>();
+
+            DbInitializer.Initialize(news);
         }
     }
 }

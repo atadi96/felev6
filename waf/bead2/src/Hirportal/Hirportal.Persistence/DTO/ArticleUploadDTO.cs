@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hirportal.Persistence.DTO
 {
-    public class ArticleDTO
+    public class ArticleUploadDTO
     {
         public int Id { get; set; }
 
@@ -14,11 +14,10 @@ namespace Hirportal.Persistence.DTO
 
         public string Content { get; set; }
 
-        public ImageDTO[] Images { get; set; }
+        public bool DeleteImages { get; set; }
 
-        public ArticleDTO()
-        {
-            Id = -1;
-        }
+        public byte[][] NewImages { get; set; }
+
+        public bool Leading { get; set; }
     }
 }

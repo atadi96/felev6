@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Hirportal.WPF"
         xmlns:vm="clr-namespace:Hirportal.WPF.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        IsEnabled="{Binding IsLoaded}">
     <!--<Window.Resources>
         <DataTemplate DataType="{x:Type vm:MainViewModel}"> -->
             <StackPanel>
@@ -26,6 +27,17 @@
                         <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
                         <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
                         <DataGridTextColumn Header="Date" Binding="{Binding PublishedTime}" Width="*"/>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, 
+                                                              Path=DataContext.DeleteArticleCommand}"
+                                            CommandParameter="{Binding Id}">
+                                        Delete
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

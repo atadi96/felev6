@@ -10,6 +10,10 @@ namespace Hirportal.WPF.Persistence
 {
     public class NewsServicePersistence : INewsPersistence
     {
+        private const string API_ARTICLES = "api/articles/";
+
+        private const string API_ACCOUNT = "api/account/";
+
         private HttpClient _client;
 
         public bool IsLoggedOn { get; private set; }
@@ -25,20 +29,10 @@ namespace Hirportal.WPF.Persistence
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync("api/article/");
+                HttpResponseMessage response = await _client.GetAsync(API_ARTICLES);
                 if (response.IsSuccessStatusCode)
                 {
                     IEnumerable<ArticlePreviewDTO> previews = await response.Content.ReadAsAsync<IEnumerable<ArticlePreviewDTO>>();
-                    /*
-                    foreach (BuildingDTO building in buildings)
-                    {
-                        response = await _client.GetAsync("api/images/" + building.Id);
-                        if (response.IsSuccessStatusCode)
-                        {
-                            building.Images = (await response.Content.ReadAsAsync<IEnumerable<ImageDTO>>()).ToList();
-                        }
-                    }
-                    */
                     return previews;
                 }
                 else
@@ -57,7 +51,7 @@ namespace Hirportal.WPF.Persistence
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync("api/articles/" + articleID);
+                HttpResponseMessage response = await _client.GetAsync(API_ARTICLES + articleID);
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     return null;
@@ -81,12 +75,12 @@ namespace Hirportal.WPF.Persistence
             }
         }
 
-        public async Task<Boolean> CreateArticleAsync(ArticleDTO articleDTO)
+        public async Task<Boolean> CreateArticleAsync(ArticleUploadDTO articleDTO)
         {
             try
             {
-                HttpResponseMessage response = await _client.PostAsJsonAsync("api/articles/", articleDTO); // az értékeket azonnal JSON formátumra alakítjuk
-                articleDTO.Id = (await response.Content.ReadAsAsync<ArticleDTO>()).Id; // a válaszüzenetben megkapjuk a végleges azonosítót
+                HttpResponseMessage response = await _client.PostAsJsonAsync(API_ARTICLES, articleDTO); // az értékeket azonnal JSON formátumra alakítjuk
+                articleDTO.Id = await response.Content.ReadAsAsync<int>(); // a válaszüzenetben megkapjuk a végleges azonosítót
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -95,11 +89,11 @@ namespace Hirportal.WPF.Persistence
             }
         }
 
-        public async Task<Boolean> UpdateArticleAsync(ArticleDTO articleDTO)
+        public async Task<Boolean> UpdateArticleAsync(ArticleUploadDTO articleDTO)
         {
             try
             {
-                HttpResponseMessage response = await _client.PutAsJsonAsync("api/articles/", articleDTO);
+                HttpResponseMessage response = await _client.PutAsJsonAsync(API_ARTICLES, articleDTO);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -112,7 +106,7 @@ namespace Hirportal.WPF.Persistence
         {
             try
             {
-                HttpResponseMessage response = await _client.DeleteAsync("api/buildings/" + articleID);
+                HttpResponseMessage response = await _client.DeleteAsync(API_ARTICLES + articleID);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -121,11 +115,11 @@ namespace Hirportal.WPF.Persistence
             }
         }
 
-        public async Task<AuthorDTO> LoginAsync(String userName, String userPassword)
+        public async Task<AuthorDTO> LoginAsync(string userName, string userPassword)
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync("api/account/login/" + userName + "/" + userPassword);
+                HttpResponseMessage response = await _client.GetAsync(API_ACCOUNT + "login/" + userName + "/" + userPassword);
                 if (response.IsSuccessStatusCode)
                 {
                     AuthorDTO result = await response.Content.ReadAsAsync<AuthorDTO>();
@@ -147,7 +141,7 @@ namespace Hirportal.WPF.Persistence
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync("api/account/logout");
+                HttpResponseMessage response = await _client.GetAsync(API_ACCOUNT + "logout");
                 IsLoggedOn = !response.IsSuccessStatusCode;
                 return response.IsSuccessStatusCode;
             }

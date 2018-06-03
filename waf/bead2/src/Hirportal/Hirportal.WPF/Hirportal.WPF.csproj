@@ -72,11 +72,15 @@
     <Compile Include="Persistence\MockupPersistence.cs" />
     <Compile Include="Persistence\PersistenceUnavailableException.cs" />
     <Compile Include="Persistence\NewsServicePersistence.cs" />
+    <Compile Include="ViewModel\ArticleEditViewModel.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MessageEventArgs.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\ArticleEditWindow.xaml.cs">
+      <DependentUpon>ArticleEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginWindow.xaml.cs" />
     <Compile Include="View\MainWindow.xaml.cs" />
   </ItemGroup>
@@ -108,6 +112,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\ArticleEditWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

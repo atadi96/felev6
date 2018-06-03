@@ -13,13 +13,13 @@ namespace Hirportal.WPF.Persistence
 
         Task<ArticleDTO> GetArticleAsync(int articleID);
 
-        Task<Boolean> CreateArticleAsync(ArticleDTO article);
+        Task<Boolean> CreateArticleAsync(ArticleUploadDTO article);
 
-        Task<Boolean> UpdateArticleAsync(ArticleDTO article);
+        Task<Boolean> UpdateArticleAsync(ArticleUploadDTO article);
 
         Task<Boolean> DeleteArticleAsync(int articleID);
 
-        Task<AuthorDTO> LoginAsync(String userName, String userPassword);
+        Task<AuthorDTO> LoginAsync(string userName, string userPassword);
 
         Task<Boolean> LogoutAsync();
     }

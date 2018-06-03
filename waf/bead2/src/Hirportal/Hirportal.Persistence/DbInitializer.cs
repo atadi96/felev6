@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.ApplicationInsights.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,9 +14,12 @@ namespace Hirportal.Persistence
     {
         private static NewsContext _context;
 
-        public static void Initialize(IApplicationBuilder app)
+        public static void Initialize(NewsContext context, UserManager<Author> userManager = null)
         {
-            _context = app.ApplicationServices.GetRequiredService<NewsContext>();
+            _context = context;
+
+            //_context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
 
             _context.Database.Migrate();
 
@@ -28,6 +32,12 @@ namespace Hirportal.Persistence
                 Author gloria = new Author() { UserName = "pdp", Name = "Glorya Borger" };
                 Author nervHQ = new Author() { UserName = "notkaji", Name = "Nerv HQ" };
                 Author nyan = new Author() { UserName = "nyancat", Name = "Nyan Cat" };
+                if (userManager != null)
+                {
+                    var x1 = userManager.CreateAsync(gloria, "hmmm").Result;
+                    var x2 = userManager.CreateAsync(nervHQ, "impact").Result;
+                    var x3 = userManager.CreateAsync(nyan, "nyan").Result;
+                }
                 _context.Authors.Add(gloria);
                 _context.Authors.Add(nervHQ);
                 _context.Authors.Add(nyan);
