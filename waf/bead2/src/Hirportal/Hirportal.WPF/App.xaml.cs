@@ -39,8 +39,8 @@ namespace Hirportal.WPF
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            //persistence = new NewsServicePersistence("http://localhost:8888/");
-            persistence = new MockupPersistence();
+            persistence = new NewsServicePersistence("http://localhost:51749/");
+            //persistence = new MockupPersistence();
             loginViewModel = new LoginViewModel(persistence);
             loginViewModel.ExitApplication += ExitApplication;
             loginViewModel.LoginFailed += LoginViewModel_LoginFailed;

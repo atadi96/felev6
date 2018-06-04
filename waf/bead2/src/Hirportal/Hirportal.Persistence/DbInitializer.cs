@@ -38,9 +38,12 @@ namespace Hirportal.Persistence
                     var x2 = userManager.CreateAsync(nervHQ, "impact").Result;
                     var x3 = userManager.CreateAsync(nyan, "nyan").Result;
                 }
-                _context.Authors.Add(gloria);
-                _context.Authors.Add(nervHQ);
-                _context.Authors.Add(nyan);
+                else
+                {
+                    _context.Authors.Add(gloria);
+                    _context.Authors.Add(nervHQ);
+                    _context.Authors.Add(nyan);
+                }
                 _context.SaveChanges();
                 EvaNews(nervHQ);
                 CatNews(nyan);

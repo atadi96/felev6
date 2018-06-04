@@ -6,11 +6,18 @@
         xmlns:local="clr-namespace:Hirportal.WPF"
         xmlns:vm="clr-namespace:Hirportal.WPF.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="News - Your articles" Height="450" Width="800"
         IsEnabled="{Binding IsLoaded}">
     <!--<Window.Resources>
         <DataTemplate DataType="{x:Type vm:MainViewModel}"> -->
-            <StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
                     <StackPanel.Resources>
                         <Style TargetType="{x:Type Button}">
@@ -22,7 +29,8 @@
                     <Button Command="{Binding ExitCommand}">Logout</Button>
                 </StackPanel>
                 <DataGrid VerticalContentAlignment="Stretch" ItemsSource="{Binding ArticlePreviews}" IsReadOnly="True"
-                          AutoGenerateColumns="False">
+                          AutoGenerateColumns="False"
+                          Grid.Row="1">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="*" />
                         <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="*"/>
@@ -51,7 +59,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </Grid>
         <!--</DataTemplate>
     </Window.Resources> -->
 </Window>

@@ -23,6 +23,11 @@ namespace Hirportal.Persistence.DTO
             }
         }
 
+        public ImageDTO()
+        {
+            Data = new byte[0];
+        }
+
         public ImageDTO(byte[] data)
         {
             Id = -1;

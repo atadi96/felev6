@@ -79,9 +79,11 @@ namespace Hirportal.WPF.Persistence
         {
             try
             {
-                HttpResponseMessage response = await _client.PostAsJsonAsync(API_ARTICLES, articleDTO); // az értékeket azonnal JSON formátumra alakítjuk
-                articleDTO.Id = await response.Content.ReadAsAsync<int>(); // a válaszüzenetben megkapjuk a végleges azonosítót
-                return response.IsSuccessStatusCode;
+                using (HttpResponseMessage response = await _client.PostAsJsonAsync(API_ARTICLES, articleDTO))
+                { // az értékeket azonnal JSON formátumra alakítjuk
+                    articleDTO.Id = (await response.Content.ReadAsAsync<ArticleDTO>()).Id; // a válaszüzenetben megkapjuk a végleges azonosítót
+                    return response.IsSuccessStatusCode;
+                }
             }
             catch (Exception ex)
             {

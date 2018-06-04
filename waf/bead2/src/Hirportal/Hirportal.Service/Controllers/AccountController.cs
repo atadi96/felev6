@@ -30,7 +30,7 @@ namespace Hirportal.Service.Controllers
         [Produces("application/json")]
         public async Task<AuthorDTO> Login(string username, string password)
         {
-            if (!signInManager.IsSignedIn(User))
+            if (signInManager.IsSignedIn(User))
             {
                 string userName = User.Identity.Name;
                 var user = await userManager.FindByNameAsync(userName);
@@ -45,8 +45,7 @@ namespace Hirportal.Service.Controllers
                 var result = await signInManager.PasswordSignInAsync(username, password, true, false);
                 if (result.Succeeded)
                 {
-                    string userName = User.Identity.Name;
-                    var user = await userManager.FindByNameAsync(userName);
+                    var user = await userManager.FindByNameAsync(username);
                     return new AuthorDTO()
                     {
                         Name = user.Name,

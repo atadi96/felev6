@@ -30,7 +30,7 @@ namespace Hirportal.Service
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
-            services.AddIdentity<Author, IdentityRole>(options =>
+            services.AddIdentity<Author, IdentityRole<int>>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequiredLength = 4;

@@ -80,9 +80,9 @@ namespace Hirportal.WPF.ViewModel
 
             EditArticleCommand = new DelegateCommand(param => EditArticleAction((int)param));
 
-            ExitCommand = new DelegateCommand(param => ExitApplication?.Invoke(this, EventArgs.Empty));
+            ExitCommand = new DelegateCommand(_ => ExitApplication?.Invoke(this, EventArgs.Empty));
 
-            CreateArticleCommand = new DelegateCommand(param => CreateArticle?.Invoke(this, EventArgs.Empty));
+            CreateArticleCommand = new DelegateCommand(_ => CreateArticleAction());
 
             Refresh();
         }
@@ -103,6 +103,13 @@ namespace Hirportal.WPF.ViewModel
                     PersistenceError(ex);
                 }
             }
+            Refresh();
+        }
+
+        private void CreateArticleAction()
+        {
+            IsLoaded = false;
+            CreateArticle?.Invoke(this, EventArgs.Empty);
             Refresh();
         }
 

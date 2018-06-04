@@ -14,6 +14,8 @@ namespace Hirportal.Persistence.DTO
 
         public string Content { get; set; }
 
+        public bool Leading { get; set; }
+
         public ImageDTO[] Images { get; set; }
 
         public ArticleDTO()

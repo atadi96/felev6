@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 using Hirportal.Persistence.DTO;
 using Hirportal.WPF.Persistence;
+using Microsoft.Win32;
 
 namespace Hirportal.WPF.ViewModel
 {
     class ArticleEditViewModel : ViewModelBase
     {
         private INewsPersistence model;
+        private bool newPost;
 
         private bool isReady;
 
@@ -68,7 +71,6 @@ namespace Hirportal.WPF.ViewModel
             private set
             {
                 newImages = value;
-                article.NewImages = newImages.ToArray();
                 OnPropertyChanged();
             }
         }
@@ -90,19 +92,39 @@ namespace Hirportal.WPF.ViewModel
         public ArticleEditViewModel(INewsPersistence model, int? articleID = null)
         {
             this.model = model;
+            newPost = articleID == null;
             article = new ArticleUploadDTO();
             BackCommand = new DelegateCommand(_ => BackEvent?.Invoke(this, EventArgs.Empty));
+            SaveCommand = new DelegateCommand(_ => Save());
+            AddImageCommand = new DelegateCommand(_ => UploadImage());
             IsReady = false;
             FetchArticle(articleID);
+        }
+
+        private void UploadImage()
+        {
+            var dialog = new OpenFileDialog();
+            dialog.CheckFileExists = true;
+            dialog.Filter = "Image files (*.jpg, *.png, *.jpeg, *.bmp)|*.jpg;*.png;*.jpeg;*.bmp|Any files (*.*)|*.*";
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            dialog.Multiselect = true;
+            if (dialog.ShowDialog() == true)
+            {
+                foreach (string filename in dialog.FileNames)
+                {
+                    NewImages.Add(File.ReadAllBytes(filename));
+                }
+            }
         }
 
         private async void Save()
         {
             IsReady = false;
+            article.NewImages = NewImages.ToArray();
             bool result = false;
             try
             {
-                if (article.Id < 1)
+                if (newPost)
                 {
                     result = await model.CreateArticleAsync(article);
                 }
@@ -113,6 +135,18 @@ namespace Hirportal.WPF.ViewModel
 
                 if (result)
                 {
+                    newPost = false;
+                    if (article.DeleteImages)
+                    {
+                        Images.Clear();
+                    }
+                    foreach (byte[] imageData in NewImages)
+                    {
+                        Images.Add(imageData);
+                    }
+                    article.NewImages = new byte[0][];
+                    NewImages.Clear();
+                    DeleteImages = false;
                     OnMessageApplication("Save successful!");
                 }
                 else
@@ -131,10 +165,11 @@ namespace Hirportal.WPF.ViewModel
         {
             if (articleID == null)
             {
-                article.Id = -1;
+                article.Id = 0;
                 Title = "";
                 Description = "";
                 Content = "";
+                Leading = false;
                 DeleteImages = false;
                 NewImages = new ObservableCollection<byte[]>();
                 Images = new ObservableCollection<byte[]>();
@@ -145,9 +180,11 @@ namespace Hirportal.WPF.ViewModel
                 try
                 {
                     var articleDTO = await model.GetArticleAsync(articleID.Value);
+                    article.Id = articleDTO.Id;
                     Title = articleDTO.Title;
                     Description = articleDTO.Description;
                     Content = articleDTO.Content;
+                    Leading = articleDTO.Leading;
                     DeleteImages = false;
                     NewImages = new ObservableCollection<byte[]>();
                     Images = new ObservableCollection<byte[]>(articleDTO.Images.Select(img => img.Data));
