@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hirportal.Service", "Hirpor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hirportal.WPF", "Hirportal.WPF\Hirportal.WPF.csproj", "{21C6D2DA-4B5A-4944-9ACB-8468B2F596C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hirportal.Service.Tests", "Hirportal.Service.Tests\Hirportal.Service.Tests.csproj", "{2ECDCAB1-E64D-4D66-98FB-D8C00A9AA68D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{21C6D2DA-4B5A-4944-9ACB-8468B2F596C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21C6D2DA-4B5A-4944-9ACB-8468B2F596C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21C6D2DA-4B5A-4944-9ACB-8468B2F596C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ECDCAB1-E64D-4D66-98FB-D8C00A9AA68D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ECDCAB1-E64D-4D66-98FB-D8C00A9AA68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ECDCAB1-E64D-4D66-98FB-D8C00A9AA68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ECDCAB1-E64D-4D66-98FB-D8C00A9AA68D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
